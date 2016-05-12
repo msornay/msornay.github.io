@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>msy</title><link href="/" rel="alternate"></link><link href="/feeds/ethereum.atom.xml" rel="self"></link><id>/</id><updated>2016-05-04T20:00:00+02:00</updated><entry><title>Love locks on Ethereum</title><link href="/love-locks-on-ethereum.html" rel="alternate"></link><published>2016-05-04T20:00:00+02:00</published><author><name>msornay</name></author><id>tag:,2016-05-04:love-locks-on-ethereum.html</id><summary type="html">&lt;p&gt;We had our first Ethereum workshop at &lt;a class="reference external" href="https://lamaincollectif.wordpress.com/"&gt;La Main&lt;/a&gt;. Some people there had never
+heard about Ethereum before, the goal was to guide them in setting up geth /
+Mist on a private testnet, and have them interact with a simple smart contract.&lt;/p&gt;
+&lt;div class="section" id="setting-up-a-private-testnet"&gt;
+&lt;h2&gt;Setting up a private testnet&lt;/h2&gt;
+&lt;/div&gt;
+</summary></entry></feed>

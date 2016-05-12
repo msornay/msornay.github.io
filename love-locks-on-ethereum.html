@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Love locks on Ethereum</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">msy </a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/ethereum.html">ethereum</a></li>
+                    <li><a href="/category/misc.html">misc</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/love-locks-on-ethereum.html" rel="bookmark"
+           title="Permalink to Love locks on Ethereum">Love locks on Ethereum</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-05-09T20:00:00+02:00">
+                Published: Mon 09 May 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/msornay.html">msornay</a>
+        </address>
+<p>In <a href="/category/ethereum.html">ethereum</a>.</p>
+
+</footer><!-- /.post-info -->      <p>We had our first Ethereum workshop at <a class="reference external" href="https://lamaincollectif.wordpress.com/">La Main</a>. Some people there had never
+heard about Ethereum before, the goal was to guide them in setting up geth /
+Mist on a private testnet on a LAN, and have them interact with a simple smart contract.</p>
+<div class="section" id="setting-up-a-private-testnet">
+<h2>Setting up a private testnet</h2>
+<p>Every participant should be on the same LAN, install <a class="reference external" href="http://ethereum.github.io/go-ethereum/">geth</a> and run :</p>
+<div class="highlight"><pre><span></span>geth --identity &lt;ID&gt; --genesis &lt;GENESIS.JSON&gt; --datadir &lt;DATADIR&gt; --networkid <span class="m">9891</span> <span class="se">\</span>
+     --ipcpath <span class="s2">&quot;~/.ethereum/geth.ipc&quot;</span> <span class="se">\</span>
+     --nodiscover <span class="se">\</span>
+     --rpc --rpcport <span class="s2">&quot;8080&quot;</span> --rpccorsdomain <span class="s2">&quot;*&quot;</span> --rpcapi <span class="s2">&quot;db,eth,net,web3&quot;</span> <span class="se">\</span>
+     --port <span class="s2">&quot;30303&quot;</span>  --verbosity <span class="m">6</span> console 2&gt;&gt; geth.log
+</pre></div>
+<ul class="simple">
+<li><em>identity</em> : identity of the node on the testnet ;</li>
+<li><em>genesis</em> : Path to a genesis.json file describing the genesis block. You can
+find the one we used on our github. Every participant must use the same ;</li>
+<li><em>datadir</em> : path to a folder where the blockchain data &amp; your accounts will be
+stored. Useful to not overwrite the <tt class="docutils literal"><span class="pre">~/.ethereum</span></tt> default location ;</li>
+<li><em>networkid</em> : An integer identifying the network. Every participant should use
+the same (1 is the main network, 0 &amp; 2 are &quot;officials&quot; testnets) ;</li>
+<li><em>ipcpath</em> : Mist (the graphical wallet) looks for a socket at
+<tt class="docutils literal"><span class="pre">~/.ethereum/geth.ipc</span></tt> to talk with a geth process (and launch its own if
+it doesn't find one). Since we moved the <tt class="docutils literal">datadir</tt>, we need to move
+<tt class="docutils literal">geth.ipc</tt> back ;</li>
+<li><em>nodiscover</em> : Disable peer discovery since we will use a static peer
+list. Maybe it's possible to enable peer discovery on the LAN only ? I
+haven't really looked into it.</li>
+</ul>
+</div>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
