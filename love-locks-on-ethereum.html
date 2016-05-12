@@ -24,12 +24,13 @@
       <h1 class="entry-title">
         <a href="/love-locks-on-ethereum.html" rel="bookmark"
            title="Permalink to Love locks on Ethereum">Love locks on Ethereum</a></h1>
+<a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="lechfeck">Tweet</a><script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
     </header>
 
     <div class="entry-content">
 <footer class="post-info">
-        <abbr class="published" title="2016-05-09T20:00:00+02:00">
-                Published: Mon 09 May 2016
+        <abbr class="published" title="2016-05-12T20:00:00+02:00">
+                Published: Thu 12 May 2016
         </abbr>
 
         <address class="vcard author">
@@ -42,11 +43,10 @@ heard about Ethereum before, the goal was to guide them in setting up geth /
 Mist on a private testnet on a LAN, and have them interact with a simple smart contract.</p>
 <div class="section" id="setting-up-a-private-testnet">
 <h2>Setting up a private testnet</h2>
-<p>Every participant should be on the same LAN, install <a class="reference external" href="http://ethereum.github.io/go-ethereum/">geth</a> and run :</p>
+<p>Every participant should be on the same LAN, install <a class="reference external" href="https://github.com/ethereum/go-ethereum/releases">geth</a> and run :</p>
 <div class="highlight"><pre><span></span>geth --identity &lt;ID&gt; --genesis &lt;GENESIS.JSON&gt; --datadir &lt;DATADIR&gt; --networkid <span class="m">9891</span> <span class="se">\</span>
      --ipcpath <span class="s2">&quot;~/.ethereum/geth.ipc&quot;</span> <span class="se">\</span>
      --nodiscover <span class="se">\</span>
-     --rpc --rpcport <span class="s2">&quot;8080&quot;</span> --rpccorsdomain <span class="s2">&quot;*&quot;</span> --rpcapi <span class="s2">&quot;db,eth,net,web3&quot;</span> <span class="se">\</span>
      --port <span class="s2">&quot;30303&quot;</span>  --verbosity <span class="m">6</span> console 2&gt;&gt; geth.log
 </pre></div>
 <ul class="simple">
@@ -65,6 +65,83 @@ it doesn't find one). Since we moved the <tt class="docutils literal">datadir</t
 list. Maybe it's possible to enable peer discovery on the LAN only ? I
 haven't really looked into it.</li>
 </ul>
+<p>You should now have access to the geth javascript console where you can type :</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="nx">admin</span><span class="p">.</span><span class="nx">nodeInfo</span>
+</pre></div>
+<p>To know your <tt class="docutils literal">nodeId</tt>. Share with other participant your <tt class="docutils literal">nodeUrl</tt> :</p>
+<div class="highlight"><pre><span></span><span class="nx">enode</span><span class="o">:</span><span class="c1">//&lt;nodeId&gt;@&lt;NODE IP ADDRESS ON THE LAN&gt;:30303</span>
+</pre></div>
+<p>Every other node can now add you as a peer, either by using
+<tt class="docutils literal">admin.addPeer(nodeURL)</tt> or by creationg a JSON list of node urls in
+<tt class="docutils literal"><span class="pre">&lt;datadir&gt;/static-nodes.json</span></tt> :</p>
+<div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="nx">enode</span><span class="o">:</span><span class="c1">//&lt;nodeId 1&gt;@&lt;NODE 1 IP ADDRESS ON THE LAN&gt;:30303,</span>
+  <span class="nx">enode</span><span class="o">:</span><span class="c1">//&lt;nodeId 2&gt;@&lt;NODE 2 IP ADDRESS ON THE LAN&gt;:30303</span>
+<span class="p">]</span>
+</pre></div>
+<p>You can now start <a class="reference external" href="https://github.com/ethereum/mist/releases">Mist</a>. It should warn you that you are on a testnet, and
+display the number of peers you added.</p>
+<p>To mine some ether, create an account (using Mist) and type the following
+command in geth console :</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="nx">miner</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+<p>The number of block should increase rapidly (as the difficulty is low) and
+peers should sync accordingly. Have fun sending those fresh ether around using
+other participants' addresses. To see the transactions being taken into account
+only when someone is mining and the blockchain growing is already quite
+educationnal in itself.</p>
+</div>
+<div class="section" id="a-love-lock-contract">
+<h2>A Love Lock contract</h2>
+<p>To illustrate the permanency of data stored on the blockchain, we decided to
+implemented <a class="reference external" href="https://en.wikipedia.org/wiki/Love_lock">love locks</a>. The basic idea is that if two persons mutually agree to
+be linked, they become publicly binded, and that lock cannot be removed.</p>
+<p>The solidity source code is pretty straightforward :</p>
+<div class="highlight"><pre><span></span>contract EthLove {
+  mapping (address =&gt; address) public links;
+
+  function EthLove() {}
+
+  function link(address with) {
+    if (links[msg.sender] != 0) throw;
+    links[msg.sender] = with;
+  }
+
+  function areLinked(address a, address b) returns (bool) {
+    return (links[a] == b &amp;&amp; links[b] == a);
+  }
+}
+</pre></div>
+<p>We have a public mapping storing people's intention of associating with someone
+else (using the <tt class="docutils literal">link()</tt> method) and we consider two person bound if they
+published mutual intentions. Note how divorces are not allowed with the use of
+<tt class="docutils literal">throw</tt> ; No sir, not in this contract.</p>
+<p>Publish this contract using Mist &amp; import it into geth (look into
+<a class="reference external" href="https://github.com/colibriste/ethereum/blob/master/01_ethlove/are_linked.js">are_linked.js</a> for some inspiration ; geth have a very useful <tt class="docutils literal">loadScript()</tt>
+function that loads a js file and executes it).</p>
+<p>Take a moment to consider how the contract methods differs :</p>
+<ul class="simple">
+<li><tt class="docutils literal">link()</tt> changes the internal state of the blockchain-based database and as
+such requires a proper transaction that will need to be included into a new
+block by a miner and thus will cost gas.</li>
+<li><tt class="docutils literal">areLinked()</tt> leaves the database untouched, and can be called locally in
+the geth console, without the need to publish a transaction.</li>
+</ul>
+<p>As a matter of fact, the link check can be done by reading inside the mapping
+directly (<tt class="docutils literal">areLinked()</tt> function in <a class="reference external" href="https://github.com/colibriste/ethereum/blob/master/01_ethlove/are_linked.js">are_linked.js</a>). It is however
+interesting to note that by using the contract function locally we execute code
+that we read on the blockchain, that is public, immutable and that allow us to
+describe without ambiguity what we mean by <em>linked</em>.</p>
+</div>
+<div class="section" id="the-diamond">
+<h2>The diamond</h2>
+<p>An important part of a love lock is throwing the key away. Luckily Ethereum
+don't lack keys.</p>
+<p>In addition to the linking above, we had people send ether to an address
+obtained by XOR'ing the couple's addresses (the code is in <a class="reference external" href="https://github.com/colibriste/ethereum/blob/master/01_ethlove/are_linked.js">are_linked.js</a>
+too). Since the private key needed to transfer the ether from the resulting
+adresse has no cryptographic chance to exist, those Ether are in effect an
+everlasting token of love, that you can put a price tag on.</p>
 </div>
 
     </div><!-- /.entry-content -->
@@ -72,14 +149,15 @@ haven't really looked into it.</li>
   </article>
 </section>
         <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>blogroll</h2>
+                <div class="social">
+                        <h2>social</h2>
                         <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+
+                            <li><a href="https://twitter.com/lechfeck">twitter</a></li>
+                            <li><a href="https://fr.linkedin.com/in/mathieu-sornay-2874098b">linkedin</a></li>
+                            <li><a href="https://github.com/msornay">github</a></li>
                         </ul>
-                </div><!-- /.blogroll -->
+                </div><!-- /.social -->
         </section><!-- /#extras -->
 
         <footer id="contentinfo" class="body">
