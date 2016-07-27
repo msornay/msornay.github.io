@@ -1,8 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>msy</title><link href="/" rel="alternate"></link><link href="/feeds/ethereum.atom.xml" rel="self"></link><id>/</id><updated>2016-05-04T20:00:00+02:00</updated><entry><title>Love locks on Ethereum</title><link href="/love-locks-on-ethereum.html" rel="alternate"></link><published>2016-05-04T20:00:00+02:00</published><author><name>msornay</name></author><id>tag:,2016-05-04:love-locks-on-ethereum.html</id><summary type="html">&lt;p&gt;We had our first Ethereum workshop at &lt;a class="reference external" href="https://lamaincollectif.wordpress.com/"&gt;La Main&lt;/a&gt;. Some people there had never
+<feed xmlns="http://www.w3.org/2005/Atom"><title>msy</title><link href="/" rel="alternate"></link><link href="/feeds/ethereum.atom.xml" rel="self"></link><id>/</id><updated>2016-07-27T12:00:00+02:00</updated><entry><title>More love locks</title><link href="/more-love-locks.html" rel="alternate"></link><published>2016-07-27T12:00:00+02:00</published><author><name>msornay</name></author><id>tag:,2016-07-27:more-love-locks.html</id><summary type="html">&lt;p&gt;We made a reboot of the &amp;quot;love locks on ethereum&amp;quot; dapp to host an &lt;a class="reference external" href="https://twitter.com/AssethFR"&gt;Asseth&lt;/a&gt;
+workshop. It is more complete, and comes with a better tutorial.&lt;/p&gt;
+&lt;p&gt;Check it out &lt;a class="reference external" href="https://github.com/asseth/workshop/tree/master/ethlove"&gt;here&lt;/a&gt;&lt;/p&gt;
+</summary></entry><entry><title>No-Nonsense Ethereum Mining Rig</title><link href="/no-nonsense-ethereum-mining-rig.html" rel="alternate"></link><published>2016-05-18T20:00:00+02:00</published><author><name>msornay</name></author><id>tag:,2016-05-18:no-nonsense-ethereum-mining-rig.html</id><summary type="html">&lt;p&gt;This article is the first element of a set of tools/tutorials that aims to make
+mining Ether with free software painless and secure. Given the number of
+conflicting / outdated / plain wrong instructions &lt;a class="reference external" href="https://github.com/colibriste"&gt;we&lt;/a&gt; found online when setting
+up our own rigs, we think that there is room for something minimal, easy and
+up-to-date.&lt;/p&gt;
+&lt;p&gt;The instructions here are kind of raw, we are working on making this accessible
+to first-time linux users. In the mean time, here what we suggest (if you are
+using AMD GPUs):&lt;/p&gt;
+&lt;div class="section" id="the-os"&gt;
+&lt;h2&gt;The OS&lt;/h2&gt;
+&lt;p&gt;Install &lt;a class="reference external" href="http://cdimage.ubuntu.com/netboot/14.04/"&gt;Ubuntu Server 14.04&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="the-dependencies"&gt;
+&lt;h2&gt;The Dependencies&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo add-apt-repository ppa:ethereum/ethereum
+sudo add-apt-repository ppa:ethereum/ethereum-qt
+
+sudo apt-get update
+sudo apt-get install nano git fglrx-updates cpp-ethereum python-twisted
+
+git clone --branch 0.0.5 https://github.com/Atrides/eth-proxy
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Yes, this will install xorg but we found out that none of that &lt;tt class="docutils literal"&gt;aticonfig
+&lt;span class="pre"&gt;--initial&lt;/span&gt;&lt;/tt&gt; stuff was necessary. You can now check with &lt;tt class="docutils literal"&gt;ethminer
+&lt;span class="pre"&gt;--list-devices&lt;/span&gt;&lt;/tt&gt; that your GPUs are ready to use.&lt;/p&gt;
+&lt;p&gt;No, &lt;tt class="docutils literal"&gt;aticonfig &lt;span class="pre"&gt;--odgt&lt;/span&gt;&lt;/tt&gt; to check temperature doesn't work with this setup. We
+are working on it.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="the-configuration"&gt;
+&lt;h2&gt;The Configuration&lt;/h2&gt;
+&lt;p&gt;&lt;tt class="docutils literal"&gt;nano &lt;span class="pre"&gt;eth-proxy/eth-proxy.conf&lt;/span&gt;&lt;/tt&gt; to edit eth-proxy configuration. You need to edit :&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;tt class="docutils literal"&gt;HOST = 127.0.0.1&lt;/tt&gt;&lt;/li&gt;
+&lt;li&gt;&lt;tt class="docutils literal"&gt;WALLET = 0x&amp;lt;YOUR_ADDRESS_HERE&amp;gt;&lt;/tt&gt; (Triple check this)&lt;/li&gt;
+&lt;li&gt;&lt;tt class="docutils literal"&gt;ENABLE_WORKER_ID = True&lt;/tt&gt;&lt;/li&gt;
+&lt;li&gt;&lt;tt class="docutils literal"&gt;POOL_HOST&lt;/tt&gt; &amp;amp; &lt;tt class="docutils literal"&gt;POOL_HOST_FAILOVER&lt;/tt&gt; (We use &lt;a class="reference external" href="http://ethermine.org/"&gt;ethermine&lt;/a&gt;, but the choice is
+entirely up to you).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;It should look like this :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;###&lt;/span&gt;
+&lt;span class="c1"&gt;# Examples of command line for miners:&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;#   ethminer.exe --farm-recheck 200 -G -F http://HOST:PORT/&lt;/span&gt;
+&lt;span class="c1"&gt;#   ethminer.exe --farm-recheck 300 -G -F http://HOST:PORT/rig1&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;#   ethminer.exe -G -F http://127.0.0.1:8080/&lt;/span&gt;
+&lt;span class="c1"&gt;#   ethminer.exe --farm-recheck 100 -G -F http://192.168.0.33:8080/rig1&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;#  farm-recheck parameter is very individual. Just test different values.&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;#  You can submit shares without workername or&lt;/span&gt;
+&lt;span class="c1"&gt;#  You can provide workername:&lt;/span&gt;
+&lt;span class="c1"&gt;#   - with url like &amp;quot;/rig1&amp;quot;&lt;/span&gt;
+&lt;span class="c1"&gt;#   - or use automatically numbering(integer) based on IP of miner&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;#  Servers:&lt;/span&gt;
+&lt;span class="c1"&gt;#    EU-Server:  eth-eu.dwarfpool.com  (France)&lt;/span&gt;
+&lt;span class="c1"&gt;#    US-Server:  eth-us.dwarfpool.com  (EastCoast: Montreal,Canada)&lt;/span&gt;
+&lt;span class="c1"&gt;#    US-Server:  eth-us2.dwarfpool.com (WestCoast: Las Vegas)&lt;/span&gt;
+&lt;span class="c1"&gt;#    RU-Server:  eth-ru.dwarfpool.com  (Moscow)&lt;/span&gt;
+&lt;span class="c1"&gt;#    HK-Server:  eth-hk.dwarfpool.com  (Hong-Kong)&lt;/span&gt;
+&lt;span class="c1"&gt;#    CN-Server:  eth-cn.dwarfpool.com  (Shanghai)&lt;/span&gt;
+&lt;span class="c1"&gt;#    SG-Server:  eth-sg.dwarfpool.com  (Singapore)&lt;/span&gt;
+&lt;span class="c1"&gt;#    AU-Server:  eth-au.dwarfpool.com  (Melbourne)&lt;/span&gt;
+&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;span class="c1"&gt;###&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Select Ethereum ETH or Expanse EXP&lt;/span&gt;
+&lt;span class="n"&gt;COIN&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;ETH&amp;quot;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Host and port for your workers&lt;/span&gt;
+&lt;span class="n"&gt;HOST&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;127.0.0.1&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;PORT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;8080&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Coin address where money goes&lt;/span&gt;
+&lt;span class="n"&gt;WALLET&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;0x&amp;lt;YOUR ADDRESS HERE&amp;gt;&amp;quot;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# To donate please use wallet &amp;quot;0xea7263feb7d8a8ab0a11eedd8f1ce04412ab0820&amp;quot;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# It&amp;#39;s useful for individually monitoring and statistic&lt;/span&gt;
+&lt;span class="n"&gt;ENABLE_WORKER_ID&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+
+&lt;span class="c1"&gt;# On DwarfPool you have option to monitor your workers via email.&lt;/span&gt;
+&lt;span class="c1"&gt;# If WORKER_ID is enabled, you can monitor every worker/rig separately.&lt;/span&gt;
+&lt;span class="n"&gt;MONITORING&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+&lt;span class="n"&gt;MONITORING_EMAIL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;mail@example.com&amp;quot;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Main pool&lt;/span&gt;
+&lt;span class="n"&gt;POOL_HOST&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;eu1.ethermine.org&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;POOL_PORT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;4444&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Failover pool&lt;/span&gt;
+&lt;span class="n"&gt;POOL_FAILOVER_ENABLE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+
+&lt;span class="n"&gt;POOL_HOST_FAILOVER1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;us1.ethermine.org&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;POOL_PORT_FAILOVER1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;4444&lt;/span&gt;
+
+&lt;span class="n"&gt;POOL_HOST_FAILOVER2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;us2.ethermine.org&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;POOL_PORT_FAILOVER2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;4444&lt;/span&gt;
+
+&lt;span class="n"&gt;POOL_HOST_FAILOVER3&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;asia1.ethermine.org&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;POOL_PORT_FAILOVER3&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;4444&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Logging&lt;/span&gt;
+&lt;span class="n"&gt;LOG_TO_FILE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Enable debug&lt;/span&gt;
+&lt;span class="n"&gt;DEBUG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="the-mining"&gt;
+&lt;h2&gt;The Mining&lt;/h2&gt;
+&lt;p&gt;Launch eth-proxy and ethminer, replacing &lt;tt class="docutils literal"&gt;&amp;lt;RIG_NAME&amp;gt;&lt;/tt&gt; with whichever name you
+like&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python eth-proxy/eth-proxy.py 2&amp;gt; ethproxy.log &lt;span class="p"&gt;&amp;amp;&lt;/span&gt;
+ethminer --farm-recheck &lt;span class="m"&gt;200&lt;/span&gt; -G -F http://127.0.0.1:8080/&amp;lt;RIG_NAME&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+</summary></entry><entry><title>Love locks on Ethereum</title><link href="/love-locks-on-ethereum.html" rel="alternate"></link><published>2016-05-12T20:00:00+02:00</published><author><name>msornay</name></author><id>tag:,2016-05-12:love-locks-on-ethereum.html</id><summary type="html">&lt;p&gt;We had our first Ethereum workshop at &lt;a class="reference external" href="https://lamaincollectif.wordpress.com/"&gt;La Main&lt;/a&gt;. Some people there had never
 heard about Ethereum before, the goal was to guide them in setting up geth /
-Mist on a private testnet, and have them interact with a simple smart contract.&lt;/p&gt;
+Mist on a private testnet on a LAN, and have them interact with a simple smart contract.&lt;/p&gt;
+&lt;p&gt;All the source code is &lt;a class="reference external" href="https://github.com/colibriste/ethereum/tree/master/01_ethlove"&gt;here&lt;/a&gt;&lt;/p&gt;
 &lt;div class="section" id="setting-up-a-private-testnet"&gt;
 &lt;h2&gt;Setting up a private testnet&lt;/h2&gt;
+&lt;p&gt;Every participant should be on the same LAN, install &lt;a class="reference external" href="https://github.com/ethereum/go-ethereum/releases"&gt;geth&lt;/a&gt; and run :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;geth --identity &amp;lt;ID&amp;gt; --genesis &amp;lt;GENESIS.JSON&amp;gt; --datadir &amp;lt;DATADIR&amp;gt; --networkid &lt;span class="m"&gt;9891&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+     --ipcpath &lt;span class="s2"&gt;&amp;quot;~/.ethereum/geth.ipc&amp;quot;&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+     --nodiscover &lt;span class="se"&gt;\&lt;/span&gt;
+     --port &lt;span class="s2"&gt;&amp;quot;30303&amp;quot;&lt;/span&gt;  --verbosity &lt;span class="m"&gt;6&lt;/span&gt; console 2&amp;gt;&amp;gt; geth.log
+&lt;/pre&gt;&lt;/div&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;em&gt;identity&lt;/em&gt; : identity of the node on the testnet ;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;genesis&lt;/em&gt; : Path to a genesis.json file describing the genesis block. You can
+find the one we used on our github. Every participant must use the same ;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;datadir&lt;/em&gt; : path to a folder where the blockchain data &amp;amp; your accounts will be
+stored. Useful to not overwrite the &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;~/.ethereum&lt;/span&gt;&lt;/tt&gt; default location ;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;networkid&lt;/em&gt; : An integer identifying the network. Every participant should use
+the same (1 is the main network, 0 &amp;amp; 2 are &amp;quot;officials&amp;quot; testnets) ;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;ipcpath&lt;/em&gt; : Mist (the graphical wallet) looks for a socket at
+&lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;~/.ethereum/geth.ipc&lt;/span&gt;&lt;/tt&gt; to talk with a geth process (and launch its own if
+it doesn't find one). Since we moved the &lt;tt class="docutils literal"&gt;datadir&lt;/tt&gt;, we need to move
+&lt;tt class="docutils literal"&gt;geth.ipc&lt;/tt&gt; back ;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;nodiscover&lt;/em&gt; : Disable peer discovery since we will use a static peer
+list. Maybe it's possible to enable peer discovery on the LAN only ? I
+haven't really looked into it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You should now have access to the geth javascript console where you can type :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nx"&gt;admin&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;nodeInfo&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To know your &lt;tt class="docutils literal"&gt;nodeId&lt;/tt&gt;. Share with other participant your &lt;tt class="docutils literal"&gt;nodeUrl&lt;/tt&gt; :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nx"&gt;enode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//&amp;lt;nodeId&amp;gt;@&amp;lt;NODE IP ADDRESS ON THE LAN&amp;gt;:30303&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Every other node can now add you as a peer, either by using
+&lt;tt class="docutils literal"&gt;admin.addPeer(nodeURL)&lt;/tt&gt; or by creationg a JSON list of node urls in
+&lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;&amp;lt;datadir&amp;gt;/static-nodes.json&lt;/span&gt;&lt;/tt&gt; :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;
+  &lt;span class="nx"&gt;enode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//&amp;lt;nodeId 1&amp;gt;@&amp;lt;NODE 1 IP ADDRESS ON THE LAN&amp;gt;:30303,&lt;/span&gt;
+  &lt;span class="nx"&gt;enode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//&amp;lt;nodeId 2&amp;gt;@&amp;lt;NODE 2 IP ADDRESS ON THE LAN&amp;gt;:30303&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You can now start &lt;a class="reference external" href="https://github.com/ethereum/mist/releases"&gt;Mist&lt;/a&gt;. It should warn you that you are on a testnet, and
+display the number of peers you added.&lt;/p&gt;
+&lt;p&gt;To mine some ether, create an account (using Mist) and type the following
+command in geth console :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nx"&gt;miner&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;start&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The number of block should increase rapidly (as the difficulty is low) and
+peers should sync accordingly. Have fun sending those fresh ether around using
+other participants' addresses. To see the transactions being taken into account
+only when someone is mining and the blockchain growing is already quite
+educationnal in itself.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="a-love-lock-contract"&gt;
+&lt;h2&gt;A Love Lock contract&lt;/h2&gt;
+&lt;p&gt;To illustrate the permanency of data stored on the blockchain, we decided to
+implemented &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Love_lock"&gt;love locks&lt;/a&gt;. The basic idea is that if two persons mutually agree to
+be linked, they become publicly binded, and that lock cannot be removed.&lt;/p&gt;
+&lt;p&gt;The solidity source code is pretty straightforward :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;contract EthLove {
+  mapping (address =&amp;gt; address) public links;
+
+  function EthLove() {}
+
+  function link(address with) {
+    if (links[msg.sender] != 0) throw;
+    links[msg.sender] = with;
+  }
+
+  function areLinked(address a, address b) returns (bool) {
+    return (links[a] == b &amp;amp;&amp;amp; links[b] == a);
+  }
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We have a public mapping storing people's intention of associating with someone
+else (using the &lt;tt class="docutils literal"&gt;link()&lt;/tt&gt; method) and we consider two person bound if they
+published mutual intentions. Note how divorces are not allowed with the use of
+&lt;tt class="docutils literal"&gt;throw&lt;/tt&gt; ; No sir, not in this contract.&lt;/p&gt;
+&lt;p&gt;Publish this contract using Mist &amp;amp; import it into geth (look into
+&lt;a class="reference external" href="https://github.com/colibriste/ethereum/blob/master/01_ethlove/are_linked.js"&gt;are_linked.js&lt;/a&gt; for some inspiration ; geth have a very useful &lt;tt class="docutils literal"&gt;loadScript()&lt;/tt&gt;
+function that loads a js file and executes it).&lt;/p&gt;
+&lt;p&gt;Take a moment to consider how the contract methods differs :&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;tt class="docutils literal"&gt;link()&lt;/tt&gt; changes the internal state of the blockchain-based database and as
+such requires a proper transaction that will need to be included into a new
+block by a miner and thus will cost gas.&lt;/li&gt;
+&lt;li&gt;&lt;tt class="docutils literal"&gt;areLinked()&lt;/tt&gt; leaves the database untouched, and can be called locally in
+the geth console, without the need to publish a transaction.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As a matter of fact, the link check can be done by reading inside the mapping
+directly (&lt;tt class="docutils literal"&gt;areLinked()&lt;/tt&gt; function in &lt;a class="reference external" href="https://github.com/colibriste/ethereum/blob/master/01_ethlove/are_linked.js"&gt;are_linked.js&lt;/a&gt;). It is however
+interesting to note that by using the contract function locally we execute code
+that we read on the blockchain, that is public, immutable and that allow us to
+describe without ambiguity what we mean by &lt;em&gt;linked&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="the-diamond"&gt;
+&lt;h2&gt;The diamond&lt;/h2&gt;
+&lt;p&gt;An important part of a love lock is throwing the key away. Luckily Ethereum
+don't lack keys.&lt;/p&gt;
+&lt;p&gt;In addition to the linking above, we had people send ether to an address
+obtained by XOR'ing the couple's addresses (the code is in &lt;a class="reference external" href="https://github.com/colibriste/ethereum/blob/master/01_ethlove/are_linked.js"&gt;are_linked.js&lt;/a&gt;
+too). Since the private key needed to transfer the ether from the resulting
+adresse has no cryptographic chance to exist, those Ether are in effect an
+everlasting token of love, that you can put a price tag on.&lt;/p&gt;
 &lt;/div&gt;
 </summary></entry></feed>

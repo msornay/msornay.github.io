@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <title>msy - msornay</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="msy Atom Feed" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -21,7 +22,34 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/no-nonsense-ethereum-mining-rig.html">No-Nonsense Ethereum Mining Rig</a></h1>
+                    <h1 class="entry-title"><a href="/more-love-locks.html">More love locks</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2016-07-27T12:00:00+02:00">
+                Published: Wed 27 July 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/msornay.html">msornay</a>
+        </address>
+<p>In <a href="/category/ethereum.html">ethereum</a>.</p>
+
+</footer><!-- /.post-info --><p>We made a reboot of the &quot;love locks on ethereum&quot; dapp to host an <a class="reference external" href="https://twitter.com/AssethFR">Asseth</a>
+workshop. It is more complete, and comes with a better tutorial.</p>
+<p>Check it out <a class="reference external" href="https://github.com/asseth/workshop/tree/master/ethlove">here</a></p>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/no-nonsense-ethereum-mining-rig.html" rel="bookmark"
+                           title="Permalink to No-Nonsense Ethereum Mining Rig">No-Nonsense Ethereum Mining Rig</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2016-05-18T20:00:00+02:00">
                 Published: Wed 18 May 2016
@@ -32,130 +60,13 @@
         </address>
 <p>In <a href="/category/ethereum.html">ethereum</a>.</p>
 
-</footer><!-- /.post-info --><p>This article is the first element of a set of tools/tutorials that aims to make
+</footer><!-- /.post-info -->                <p>This article is the first element of a set of tools/tutorials that aims to make
 mining Ether with free software painless and secure. Given the number of
 conflicting / outdated / plain wrong instructions <a class="reference external" href="https://github.com/colibriste">we</a> found online when setting
-up our own rigs, we think that there is room for something minimal, easy and
-up-to-date.</p>
-<p>The instructions here are kind of raw, we are working on making this accessible
-to first-time linux users. In the mean time, here what we suggest (if you are
-using AMD GPUs):</p>
-<div class="section" id="the-os">
-<h2>The OS</h2>
-<p>Install <a class="reference external" href="http://cdimage.ubuntu.com/netboot/14.04/">Ubuntu Server 14.04</a></p>
-</div>
-<div class="section" id="the-dependencies">
-<h2>The Dependencies</h2>
-<div class="highlight"><pre><span></span>sudo add-apt-repository ppa:ethereum/ethereum
-sudo add-apt-repository ppa:ethereum/ethereum-qt
-
-sudo apt-get update
-sudo apt-get install nano git fglrx-updates cpp-ethereum python-twisted
-
-git clone --branch 0.0.5 https://github.com/Atrides/eth-proxy
-</pre></div>
-<p>Yes, this will install xorg but we found out that none of that <tt class="docutils literal">aticonfig
-<span class="pre">--initial</span></tt> stuff was necessary. You can now check with <tt class="docutils literal">ethminer
-<span class="pre">--list-devices</span></tt> that your GPUs are ready to use.</p>
-<p>No, <tt class="docutils literal">aticonfig <span class="pre">--odgt</span></tt> to check temperature doesn't work with this setup. We
-are working on it.</p>
-</div>
-<div class="section" id="the-configuration">
-<h2>The Configuration</h2>
-<p><tt class="docutils literal">nano <span class="pre">eth-proxy/eth-proxy.conf</span></tt> to edit eth-proxy configuration. You need to edit :</p>
-<ul class="simple">
-<li><tt class="docutils literal">HOST = 127.0.0.1</tt></li>
-<li><tt class="docutils literal">WALLET = 0x&lt;YOUR_ADDRESS_HERE&gt;</tt> (Triple check this)</li>
-<li><tt class="docutils literal">ENABLE_WORKER_ID = True</tt></li>
-<li><tt class="docutils literal">POOL_HOST</tt> &amp; <tt class="docutils literal">POOL_HOST_FAILOVER</tt> (We use <a class="reference external" href="http://ethermine.org/">ethermine</a>, but the choice is
-entirely up to you).</li>
-</ul>
-<p>It should look like this :</p>
-<div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="c1"># Examples of command line for miners:</span>
-<span class="c1">#</span>
-<span class="c1">#   ethminer.exe --farm-recheck 200 -G -F http://HOST:PORT/</span>
-<span class="c1">#   ethminer.exe --farm-recheck 300 -G -F http://HOST:PORT/rig1</span>
-<span class="c1">#</span>
-<span class="c1">#   ethminer.exe -G -F http://127.0.0.1:8080/</span>
-<span class="c1">#   ethminer.exe --farm-recheck 100 -G -F http://192.168.0.33:8080/rig1</span>
-<span class="c1">#</span>
-<span class="c1">#  farm-recheck parameter is very individual. Just test different values.</span>
-<span class="c1">#</span>
-<span class="c1">#  You can submit shares without workername or</span>
-<span class="c1">#  You can provide workername:</span>
-<span class="c1">#   - with url like &quot;/rig1&quot;</span>
-<span class="c1">#   - or use automatically numbering(integer) based on IP of miner</span>
-<span class="c1">#</span>
-<span class="c1">#  Servers:</span>
-<span class="c1">#    EU-Server:  eth-eu.dwarfpool.com  (France)</span>
-<span class="c1">#    US-Server:  eth-us.dwarfpool.com  (EastCoast: Montreal,Canada)</span>
-<span class="c1">#    US-Server:  eth-us2.dwarfpool.com (WestCoast: Las Vegas)</span>
-<span class="c1">#    RU-Server:  eth-ru.dwarfpool.com  (Moscow)</span>
-<span class="c1">#    HK-Server:  eth-hk.dwarfpool.com  (Hong-Kong)</span>
-<span class="c1">#    CN-Server:  eth-cn.dwarfpool.com  (Shanghai)</span>
-<span class="c1">#    SG-Server:  eth-sg.dwarfpool.com  (Singapore)</span>
-<span class="c1">#    AU-Server:  eth-au.dwarfpool.com  (Melbourne)</span>
-<span class="c1">#</span>
-<span class="c1">###</span>
-
-<span class="c1"># Select Ethereum ETH or Expanse EXP</span>
-<span class="n">COIN</span> <span class="o">=</span> <span class="s2">&quot;ETH&quot;</span>
-
-<span class="c1"># Host and port for your workers</span>
-<span class="n">HOST</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
-<span class="n">PORT</span> <span class="o">=</span> <span class="mi">8080</span>
-
-<span class="c1"># Coin address where money goes</span>
-<span class="n">WALLET</span> <span class="o">=</span> <span class="s2">&quot;0x&lt;YOUR ADDRESS HERE&gt;&quot;</span>
-
-<span class="c1"># To donate please use wallet &quot;0xea7263feb7d8a8ab0a11eedd8f1ce04412ab0820&quot;</span>
-
-<span class="c1"># It&#39;s useful for individually monitoring and statistic</span>
-<span class="n">ENABLE_WORKER_ID</span> <span class="o">=</span> <span class="bp">True</span>
-
-<span class="c1"># On DwarfPool you have option to monitor your workers via email.</span>
-<span class="c1"># If WORKER_ID is enabled, you can monitor every worker/rig separately.</span>
-<span class="n">MONITORING</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="n">MONITORING_EMAIL</span> <span class="o">=</span> <span class="s2">&quot;mail@example.com&quot;</span>
-
-<span class="c1"># Main pool</span>
-<span class="n">POOL_HOST</span> <span class="o">=</span> <span class="s2">&quot;eu1.ethermine.org&quot;</span>
-<span class="n">POOL_PORT</span> <span class="o">=</span> <span class="mi">4444</span>
-
-<span class="c1"># Failover pool</span>
-<span class="n">POOL_FAILOVER_ENABLE</span> <span class="o">=</span> <span class="bp">True</span>
-
-<span class="n">POOL_HOST_FAILOVER1</span> <span class="o">=</span> <span class="s2">&quot;us1.ethermine.org&quot;</span>
-<span class="n">POOL_PORT_FAILOVER1</span> <span class="o">=</span> <span class="mi">4444</span>
-
-<span class="n">POOL_HOST_FAILOVER2</span> <span class="o">=</span> <span class="s2">&quot;us2.ethermine.org&quot;</span>
-<span class="n">POOL_PORT_FAILOVER2</span> <span class="o">=</span> <span class="mi">4444</span>
-
-<span class="n">POOL_HOST_FAILOVER3</span> <span class="o">=</span> <span class="s2">&quot;asia1.ethermine.org&quot;</span>
-<span class="n">POOL_PORT_FAILOVER3</span> <span class="o">=</span> <span class="mi">4444</span>
-
-<span class="c1"># Logging</span>
-<span class="n">LOG_TO_FILE</span> <span class="o">=</span> <span class="bp">True</span>
-
-<span class="c1"># Enable debug</span>
-<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">False</span>
-</pre></div>
-</div>
-<div class="section" id="the-mining">
-<h2>The Mining</h2>
-<p>Launch eth-proxy and ethminer, replacing <tt class="docutils literal">&lt;RIG_NAME&gt;</tt> with whichever name you
-like</p>
-<div class="highlight"><pre><span></span>python eth-proxy/eth-proxy.py 2&gt; ethproxy.log <span class="p">&amp;</span>
-ethminer --farm-recheck <span class="m">200</span> -G -F http://127.0.0.1:8080/&lt;RIG_NAME&gt;
-</pre></div>
-</div>
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+up our own rigs, we think that there is room for something ...</p>
+                <a class="readmore" href="/no-nonsense-ethereum-mining-rig.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -209,6 +120,7 @@ Mist on a private testnet on a LAN, and have them interact with a simple smart c
                 <div class="social">
                         <h2>social</h2>
                         <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="https://twitter.com/lechfeck">twitter</a></li>
                             <li><a href="https://fr.linkedin.com/in/mathieu-sornay-2874098b">linkedin</a></li>
